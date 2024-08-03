@@ -24,7 +24,7 @@ class GitlabApi(
   }
 
   def mergeRequestParticipants(projectId: Int, mergeRequestIid: Int): Task[Seq[GitlabMergeRequestParticipant]] = {
-    val request: Request[DecodeResult[Either[StatusCode, GitlabMergeRequestParticipant]], Any] = SttpClientInterpreter()
+    val request: Request[DecodeResult[Either[StatusCode, Seq[GitlabMergeRequestParticipant]]], Any] = SttpClientInterpreter()
       .toRequest(GitlabApi.mergeRequestParticipantsEndpoint, Some(uri"$config.url"))
       .apply((projectId, mergeRequestIid, config.token))
 
@@ -50,6 +50,6 @@ object GitlabApi {
       .get
       .in("api" / "v4" / "projects" / path[Int]("id") / "merge_requests" / path[Int]("merge_request_iid") / "participants")
       .in(header[String]("PRIVATE-TOKEN"))
-      .out(jsonBody[GitlabMergeRequestParticipant])
+      .out(jsonBody[Seq[GitlabMergeRequestParticipant]])
       .errorOut(statusCode)
 }
