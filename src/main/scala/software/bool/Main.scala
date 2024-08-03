@@ -1,10 +1,12 @@
 package software.bool
 
+import com.slack.api.Slack
 import software.bool.domain.{Destinees, Notification}
-import software.bool.gitlab.GitlabApi
+import software.bool.gitlab.{GitlabApi, GitlabConfig}
 import software.bool.server.Server
-import software.bool.slack.SlackApi
-import zio.{Scope, ZIO, ZIOAppArgs, ZIOAppDefault, ZLayer}
+import software.bool.slack.{SlackApi, SlackConfig}
+import sttp.client3.armeria.zio.ArmeriaZioBackend
+import zio.{ConfigProvider, Scope, ZIO, ZIOAppArgs, ZIOAppDefault, ZLayer}
 
 object Main extends ZIOAppDefault {
 
@@ -12,6 +14,11 @@ object Main extends ZIOAppDefault {
 
   override val bootstrap: ZLayer[ZIOAppArgs, Any, Unit] =
     ZLayer.make[Unit](
+      ZLayer.succeed(ConfigProvider.defaultProvider),
+      GitlabConfig.live,
+      SlackConfig.live,
+      ZLayer.succeed(Slack.getInstance()),
+      ArmeriaZioBackend.layer(),
       SlackApi.live,
       GitlabApi.live,
       Destinees.live,
@@ -19,7 +26,7 @@ object Main extends ZIOAppDefault {
       new Server().live,
     )
 
-  override def run: ZIO[Any & ZIOAppArgs & Scope, Any, Any] = 
-    ZIO.logInfo("Bootstrap completed") 
+  override def run: ZIO[Any & ZIOAppArgs & Scope, Any, Any] =
+    ZIO.logInfo("Bootstrap completed")
       *> ZIO.unit.forever
 }

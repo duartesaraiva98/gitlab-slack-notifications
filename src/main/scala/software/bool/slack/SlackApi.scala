@@ -3,7 +3,9 @@ package software.bool.slack
 import com.slack.api.Slack
 import com.slack.api.methods.request.chat.ChatPostMessageRequest
 import com.slack.api.methods.request.users.UsersLookupByEmailRequest
+import com.slack.api.model.Attachment
 import software.bool.domain.Notification
+import scala.jdk.CollectionConverters._
 import zio.{RIO, RLayer, Task, UIO, ZIO, ZLayer}
 
 class SlackApi(config: SlackConfig, slack: Slack) {
@@ -16,6 +18,7 @@ class SlackApi(config: SlackConfig, slack: Slack) {
         methods.chatPostMessage(
           ChatPostMessageRequest.builder()
             .text(notification.text.text)
+            .attachments(notification.text.attachment.map(a => Attachment.builder().text(a).build()).toSeq.asJava)
             .channel(userId)
             .build()
         )
@@ -34,7 +37,7 @@ class SlackApi(config: SlackConfig, slack: Slack) {
 }
 
 object SlackApi {
-  
+
   val live: RLayer[SlackConfig & Slack, SlackApi] = ZLayer.fromFunction(new SlackApi(_, _))
-  
+
 }

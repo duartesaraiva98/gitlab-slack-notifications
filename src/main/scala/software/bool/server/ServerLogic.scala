@@ -22,14 +22,14 @@ class ServerLogic(resolver: Notification.Resolver, slackApi: SlackApi) {
               body <- ZIO.fromEither(decode[CommentHook](jsonBody)).tapError(err =>
                 ZIO.logError(s"Failed to decode ${err}")
               ).orDie
-              _ <- resolver.of(body).run(slackApi).orDie
+              _ <- resolver.of(body).run(slackApi).logError.orDie
             } yield StatusCode.Ok
           case "merge request hook" =>
             for {
               body <- ZIO.fromEither(decode[MergeRequestHook](jsonBody)).tapError(err =>
                 ZIO.logError(s"Failed to decode $err")
               ).orDie
-              _ <- resolver.of(body).run(slackApi).orDie
+              _ <- resolver.of(body).run(slackApi).logError.orDie
             } yield StatusCode.Ok
           case _ =>
             ZIO.logInfo(s"Unimplemented event received: ${jsonBody}")

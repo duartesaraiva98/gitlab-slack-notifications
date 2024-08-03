@@ -17,8 +17,6 @@ case class MergeRequestHook(
                              user: User,
                              project: Project,
                              object_attributes: MRObjectAttributes,
-                             assignees: Seq[UserWithoutEmail],
-                             reviewers: Seq[UserWithoutEmail]
                            )derives Codec
 
 case class MergeRequest(

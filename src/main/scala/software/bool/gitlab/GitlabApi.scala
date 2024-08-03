@@ -17,7 +17,7 @@ class GitlabApi(
 
   def userById(id: Int): ZIO[Any, Throwable, GitlabUser] = {
     val request: Request[DecodeResult[Either[StatusCode, GitlabUser]], Any] = SttpClientInterpreter()
-      .toRequest(GitlabApi.userByIdEndpoint, Some(uri"$config.url"))
+      .toRequest(GitlabApi.userByIdEndpoint, Some(uri"${config.url}"))
       .apply((id, config.token))
 
     sttpBackend.send(request).toZIO
@@ -25,7 +25,7 @@ class GitlabApi(
 
   def mergeRequestParticipants(projectId: Int, mergeRequestIid: Int): Task[Seq[GitlabMergeRequestParticipant]] = {
     val request: Request[DecodeResult[Either[StatusCode, Seq[GitlabMergeRequestParticipant]]], Any] = SttpClientInterpreter()
-      .toRequest(GitlabApi.mergeRequestParticipantsEndpoint, Some(uri"$config.url"))
+      .toRequest(GitlabApi.mergeRequestParticipantsEndpoint, Some(uri"${config.url}"))
       .apply((projectId, mergeRequestIid, config.token))
 
     sttpBackend.send(request).toZIO

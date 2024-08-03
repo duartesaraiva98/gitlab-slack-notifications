@@ -17,6 +17,7 @@ lazy val root = project
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
       "com.slack.api" % "slack-api-client" % "1.40.3",
+      "dev.zio" %% "zio-config" % "4.0.2",
       "org.scalameta" %% "munit" % "1.0.0" % Test
     )
   )
