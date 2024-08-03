@@ -1,7 +1,7 @@
-package software.boolean
+package software.bool.server
 
 import sttp.tapir.ztapir.*
-import sttp.tapir.json.circe.*
+
 
 object Endpoints {
     val gitlab =

@@ -11,10 +11,12 @@ lazy val root = project
       "com.softwaremill.sttp.tapir" %% "tapir-core" % tapirVersion,
       "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirVersion,
       "com.softwaremill.sttp.tapir" %% "tapir-armeria-server-zio" % tapirVersion,
-      "org.http4s" %% "http4s-blaze-server" % http4sVersion,
+      "com.softwaremill.sttp.tapir" %% "tapir-sttp-client" % tapirVersion,
+      "com.softwaremill.sttp.client3" %% "armeria-backend-zio" % "3.9.7",
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
+      "com.slack.api" % "slack-api-client" % "1.40.3",
       "org.scalameta" %% "munit" % "1.0.0" % Test
-      )
+    )
   )

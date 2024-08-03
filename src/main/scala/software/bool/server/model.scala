@@ -1,16 +1,15 @@
-package software.boolean
+package software.bool.server
 
 import io.circe.Codec
-import sttp.tapir.Schema
 
-case class CommentWebhook(
-                           object_kind: String,
-                           event_type: String,
-                           user: User,
-                           project: Project,
-                           object_attributes: NoteObjectAttributes,
-                           merge_request: Option[MergeRequest]
-                         )derives Codec, Schema
+case class CommentHook(
+                        object_kind: String,
+                        event_type: String,
+                        user: User,
+                        project: Project,
+                        object_attributes: NoteObjectAttributes,
+                        merge_request: Option[MergeRequest],
+                      )derives Codec
 
 case class MergeRequestHook(
                              object_kind: String,
@@ -18,7 +17,9 @@ case class MergeRequestHook(
                              user: User,
                              project: Project,
                              object_attributes: MRObjectAttributes,
-                           ) derives Codec
+                             assignees: Seq[UserWithoutEmail],
+                             reviewers: Seq[UserWithoutEmail]
+                           )derives Codec
 
 case class MergeRequest(
                          id: Int,
@@ -26,7 +27,7 @@ case class MergeRequest(
                          title: String,
                          state: String,
                          draft: Boolean,
-                       )derives Codec, Schema
+                       )derives Codec
 
 case class NoteObjectAttributes(
                                  id: Int,
@@ -35,20 +36,20 @@ case class NoteObjectAttributes(
                                  author_id: Int,
                                  updated_at: String,
                                  url: String
-                               )derives Codec, Schema
+                               )derives Codec
 
 case class MRObjectAttributes(
-                            iid: Int,
-                            source_branch: String,
-                            url: String,
-                            action: String,
-                             ) derives Codec
+                               iid: Int,
+                               source_branch: String,
+                               url: String,
+                               action: String,
+                             )derives Codec
 
 case class Project(
                     id: Int,
                     name: String,
                     web_url: String,
-                  )derives Codec, Schema
+                  )derives Codec
 
 case class User(
                  id: Int,
@@ -56,5 +57,11 @@ case class User(
                  username: String,
                  avatar_url: String,
                  email: String
-               )derives Codec, Schema
+               )derives Codec
 
+case class UserWithoutEmail(
+                             id: Int,
+                             name: String,
+                             username: String,
+                             avatar_url: String,
+                           )derives Codec
