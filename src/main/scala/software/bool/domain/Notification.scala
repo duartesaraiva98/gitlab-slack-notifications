@@ -12,7 +12,7 @@ case class Notification(
 object Notification {
 
   class Resolver(
-                destinees: Destinees.Resolver,
+                  destinees: Destinees.Resolver,
                 ) {
     def of(hook: CommentHook): Task[Option[Notification]] =
       for {
