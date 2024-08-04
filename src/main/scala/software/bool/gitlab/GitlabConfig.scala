@@ -11,7 +11,7 @@ case class GitlabConfig(
 
 object GitlabConfig {
 
-  private val config: Config[GitlabConfig] = (string("GITLAB_URL").withDefault("http://localhost:9999") zip string("GITLAB_TOKEN").withDefault("fake tomen")).to[GitlabConfig]
+  private val config: Config[GitlabConfig] = (string("GITLAB_URL").withDefault("https://gitlab.com") zip string("GITLAB_TOKEN")).to[GitlabConfig]
 
   val live: RLayer[ConfigProvider, GitlabConfig] = ZLayer.fromZIO {
     for {

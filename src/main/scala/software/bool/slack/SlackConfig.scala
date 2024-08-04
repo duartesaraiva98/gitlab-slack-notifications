@@ -8,7 +8,7 @@ case class SlackConfig(token: String)
 
 object SlackConfig {
   
-  private val config: Config[SlackConfig] = (string("SLACK_TOKEN").withDefault("test-token")).to[SlackConfig]
+  private val config: Config[SlackConfig] = (string("SLACK_TOKEN")).to[SlackConfig]
   
   val live: RLayer[ConfigProvider, SlackConfig] = ZLayer.fromZIO {
     for {
