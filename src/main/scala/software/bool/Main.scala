@@ -8,9 +8,6 @@ import software.bool.slack.{SlackApi, SlackConfig}
 import sttp.client3.armeria.zio.ArmeriaZioBackend
 import zio.{ConfigProvider, Scope, ZIO, ZIOAppArgs, ZIOAppDefault, ZLayer}
 
-import java.io.File
-import scala.io.{Codec, Source}
-
 object Main extends ZIOAppDefault {
 
   implicit val appRuntime: zio.Runtime[Any] = runtime
@@ -18,7 +15,7 @@ object Main extends ZIOAppDefault {
   override val bootstrap: ZLayer[ZIOAppArgs, Any, Unit] =
     ZLayer.make[Unit](
       ZLayer.succeed(ConfigProvider.defaultProvider),
-      GitlabIdSlackIdMap.read(new File("/Users/duarte/Documents/scala-3-project-template/src/main/resources/gitlab-id-to-slack-id")),
+      GitlabIdSlackIdMap.live,
       Destinees.DestineesConfig.live,
       GitlabConfig.live,
       SlackConfig.live,

@@ -1,16 +1,31 @@
 package software.bool.domain
 
-import zio.{TaskLayer, ZIO, ZLayer}
+import zio.config.*
+import zio.Config.string
+import zio.{ConfigProvider, RLayer, ZIO, ZLayer}
 
-import java.io.File
 import scala.io.Source
 
 object GitlabIdSlackIdMap {
 
-  def read(file: File): TaskLayer[GitlabIdSlackIdMap] = ZLayer.fromZIO {
+  case class Config(filePath: String)
+
+  object Config {
+    private val config = string("STATIC_MAPPING_FILE").to[Config]
+
+    val live: RLayer[ConfigProvider, Config] = ZLayer.fromZIO {
+      for {
+        provider <- ZIO.service[ConfigProvider]
+        conf <- provider.load(config).orDie
+      } yield conf
+    }
+  }
+
+  val read: RLayer[Config, GitlabIdSlackIdMap] = ZLayer.fromZIO {
     ZIO.scoped {
       for {
-        source <- ZIO.acquireRelease(ZIO.attemptBlocking(Source.fromFile(file)))(s => ZIO.succeed(s.close()))
+        config <- ZIO.service[Config]
+        source <- ZIO.acquireRelease(ZIO.attemptBlocking(Source.fromFile(config.filePath)))(s => ZIO.succeed(s.close()))
         lines <- ZIO.attempt(source.getLines())
         map = lines.flatMap(_.split(",") match {
           case Array(gitlabId, slackId) => Some(gitlabId.toInt -> slackId)
@@ -21,6 +36,7 @@ object GitlabIdSlackIdMap {
     }
   }
 
+  val live: ZLayer[ConfigProvider, Throwable, GitlabIdSlackIdMap] = Config.live >>> read
 }
 
 class GitlabIdSlackIdMap(map: Map[Int, String]) {

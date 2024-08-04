@@ -6,12 +6,13 @@ This project is a small application you can run which processes gitlab webhooks 
 
 ### Environment Variables
 
-| Name                 | Default              | Possible Values              |
-|----------------------|----------------------|------------------------------|
-| `DESTINEES_RESOLVER` | `EqualEmail`         | `EqualEmail`,`StaticId`      |
-| `GITLAB_URL`         | `https://gitlab.com` | Any gitlab instance endpoint |
-| `GITLAB_TOKEN`       | n/a                  | A gitlab auth token          |
-| `SLACK_TOKEN`        | n/a                  | A slack app auth token       |
+| Name                  | Default              | Possible Values                  |
+|-----------------------|----------------------|----------------------------------|
+| `DESTINEES_RESOLVER`  | `EqualEmail`         | `EqualEmail`,`StaticId`          |
+| `GITLAB_URL`          | `https://gitlab.com` | Any gitlab instance endpoint     |
+| `GITLAB_TOKEN`        | n/a                  | A gitlab auth token              |
+| `SLACK_TOKEN`         | n/a                  | A slack app auth token           |
+| `STATIC_MAPPING_FILE` | n/a                  | File path to static mapping file |
 
 
 ## Set up
